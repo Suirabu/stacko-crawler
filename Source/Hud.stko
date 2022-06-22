@@ -1,0 +1,100 @@
+file Engine.stko
+
+"##########" const level1
+"###   ####" const level2
+"#$#    o #" const level3
+"# #  #   #" const level4
+"#    ### #" const level5
+"###      #" const level6
+"##########" const level7
+
+fnn displayMap {
+    "| " print level1 printLine
+    "| " print level2 printLine
+    "| " print level3 printLine
+    "| " print level4 printLine
+    "| " print level5 printLine
+    "| " print level6 printLine
+    "| " print level7 printLine
+}
+
+fnn displayLegend {
+    "| # - wall"  printLine
+    "| $ - chest" printLine
+    "| o - you"   printLine
+}
+
+fnn displayGold {
+    "| Gold    " print
+    gold printLine
+}
+
+fnn displayHealth {
+    "| Health  [" print
+
+    0 dup maxHealth < while {
+        dup health < if {
+            "=" print
+        } else {
+            " " print
+        }
+
+        1 +
+        dup maxHealth <
+    }
+
+    "]" printLine
+}
+
+fnn displayAttack {
+    "| Attack  [" print
+
+    0 dup maxAttack < while {
+        dup attack < if {
+            "=" print
+        } else {
+            " " print
+        }
+
+        1 +
+        dup maxAttack <
+    }
+
+    "]" printLine
+}
+
+# TODO: Leaks float somewhere...
+fnn displayHudWithMap {
+    "" printLine
+    "+------- -- -  -" printLine
+    
+    "| Map: " printLine
+    displayMap
+    
+    "| " printLine
+    displayLegend
+
+    "| " printLine
+    "| Stats:" printLine
+    displayGold
+    displayHealth
+    displayAttack
+    
+    "+------- -- -  -" printLine
+    "" printLine
+}
+
+# TODO: Leaks float somewhere...
+fnn displayHud {
+    "" printLine
+    "+------- -- -  -" printLine
+
+    "| Stats:" printLine
+    "|" printLine
+    displayGold
+    displayHealth
+    displayAttack
+    
+    "+------- -- -  -" printLine
+    "" printLine
+}

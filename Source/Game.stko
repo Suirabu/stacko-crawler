@@ -1,0 +1,181 @@
+file Hud.stko
+
+fnn listActions {
+    "Available actions:" printLine
+    "- l     List available actions" printLine
+    "- m     Move to a new room" printLine
+    "- h     Heal (costs 1 gold)" printLine
+    "- s     Display stats" printLine
+    "- q     Quit the game" printLine
+    "" printLine
+}
+
+fnn isValidAction {
+    dup "l" = if {
+        Yes
+    } else {
+        dup "m" = if {
+            Yes
+        } else {
+            dup "h" = if {
+                Yes
+            } else {
+                dup "s" = if {
+                    Yes
+                } else {
+                    dup "q" = if {
+                        Yes
+                    } else {
+                        No
+                    }
+                }
+            }
+        }
+    }
+}
+
+var enemyHealth
+var isOver
+No set isOver
+
+fnn enemyEncounter {
+    5 random % 3 + set enemyHealth
+
+    "An enemy with " print enemyHealth print " health approaches you." printLine
+    "" printLine
+    "Would you like to fight it?" prompt
+    if {
+        isOver not while {
+            "" printLine
+            "Would you like to attack? " prompt
+
+            if {
+                "" printLine
+                "You successfully attacked the enemy..." printLine
+                "Dealt " print attack print " damage" printLine
+                enemyHealth attack - set enemyHealth
+                "Enemy health    " print enemyHealth printLine
+
+                enemyHealth 0 <= if {
+                    "printLine"
+                    "You have won!" printLine
+                    "+2 gold" printLine
+                    gold 2 + set gold
+                    attack maxAttack = not if {
+                        "+1 attack" printLine
+                        attack 1 + set attack
+                    }
+                    Yes set isOver
+                }
+
+                isOver not if {
+                    # Random hit
+                    "" printLine
+
+                    random 2 % 1 = if {
+                        "The enemy successfully attacked you..." printLine
+                        "Took 1.0 damage" printLine
+                        health 1 - set health
+                        health 0 = if {
+                            "Game over" printLine
+                            0 exit
+                        }
+                    } else {
+                        "The enemy tried to attack, but missed!" printLine
+                    }
+
+                    "Your health     " print health printLine
+                }
+            } else {
+                "You fled the encounter..." printLine
+                attack 1 > if {
+                    "-1 attack" printLine
+                    attack 1 - set attack
+                }
+                Yes set isOver
+            }
+            isOver not
+        }
+    } else {
+        "You fled the encounter..."
+    }
+}
+
+fnn move {
+    "You moved to a nearby room. " print
+
+    random 2 % 1 = if {
+        random 2 % 1 = if {
+            "Something about it seems eerie." printLine
+        } else {
+            "Something about it seems familiar." printLine
+        }
+    } else {
+        "" printLine
+    }
+
+    random 4 % 1 = if {
+        enemyEncounter
+    }
+
+    "" printLine
+}
+
+fnn heal {
+    gold 0 = if {
+        "Not enough gold..." printLine
+    } else {
+        health maxHealth = if {
+            "You are already at max health." printLine
+        } else {
+            "You have been healed." printLine
+            "-1 gold" printLine
+            "+1 health" printLine
+
+            gold 1 - set gold
+            health 1 + set health
+        }
+    }
+
+    "" printLine
+}
+
+fnn selectAction {
+    "Please select an action ('l' to view avaiable actions) " print
+    readLine
+
+    isValidAction not while {
+        "Invalid action. Please try again ('l' to view avaiable action) " print
+        readLine
+        isValidAction not
+    }
+
+    dup "l" = if {
+        listActions
+        selectAction
+    }
+    dup "m" = if {
+        move
+    }
+    dup "h" = if {
+        heal
+    }
+    dup "q" = if {
+        0 exit
+    }
+    # XXX: Must be last option as the `displayHud` function leaks a float
+    dup "s" = if {
+        displayHud
+    }
+}
+
+fnn playTurn {
+    selectAction
+}
+
+displayHud
+
+Yes while {
+    playTurn
+    Yes
+}

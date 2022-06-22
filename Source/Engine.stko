@@ -1,0 +1,27 @@
+fnn isValidOption {
+    dup "y" = over "n" = or
+}
+
+fnn prompt {
+    print " (y/n) " print readLine
+
+    dup isValidOption not while {
+        "Invalid option. Please try again (y/n) " print readLine
+        dup isValidOption not
+    }
+
+    dup "y" =
+}
+
+var health
+5 set health
+var maxHealth
+5 set maxHealth
+
+var attack
+2 set attack
+var maxAttack
+5 set maxAttack
+
+var gold
+1 set gold
