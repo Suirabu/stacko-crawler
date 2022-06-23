@@ -1,4 +1,5 @@
-file Hud.stko
+file Source/Compat.stko
+file Source/Hud.stko
 
 fnn listActions {
     "Available actions:" printLine

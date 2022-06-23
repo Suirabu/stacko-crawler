@@ -1,0 +1,40 @@
+var seed
+0 set seed
+
+#! Seeds the random number generator
+#! (seed: num -- )
+fnn seedRandom {
+    toNum
+    set seed
+}
+
+#! Returns a pseudo-random number.
+#! Must be seeded before use to produce random results.
+#! ( -- result: num)
+fnn random {
+    # Linear Congruential Generator (https://en.wikipedia.org/wiki/Linear_congruential_generator)
+    seed 1103515245 * 12345 + 2147483647 % set seed
+    seed
+}
+
+var overBehind
+var overAhead
+
+fnn over {
+    set overAhead
+    set overBehind
+
+    overBehind
+    overAhead
+    overBehind
+}
+
+var orResult
+
+fnn or {
+    No set orResult
+
+    if { Yes set orResult }
+    if { Yes set orResult }
+    orResult
+}
