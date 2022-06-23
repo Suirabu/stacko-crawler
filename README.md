@@ -16,11 +16,11 @@ Explore an infinite dungeon, defating enemies and collecting items along the way
 
 ### Commands
 
-- `l`   List available actions"
-- `m`   Move to a new room"
-- `h`   Heal (costs 1 gold)"
-- `s`   Display stats"
-- `q`   Quit the game"
+- `l`   List available actions
+- `m`   Move to a new room
+- `h`   Heal (costs 1 gold)
+- `s`   Display stats
+- `q`   Quit the game
 
 ### Stats
 
